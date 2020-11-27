@@ -189,40 +189,6 @@ class Student:
         else:
             self.combo_gender.grid_remove()
             self.txt_Search.grid()
-
-    # def Change_Table(self, event):
-    #     if self.change_Table_txt.get() == "students":
-    #         # asd = print(*self.Users_table.get_children())
-    #
-    #
-    #     elif self.change_Table_txt.get() == "users":
-    #         asd = print(*self.Student_table.get_children())
-    #         if not asd:
-    #             self.Student_table.delete(*self.Student_table.get_children())
-    #             self.Users_table = ttk.Treeview(self.Table_Frame,
-    #                                               columns=("id", "login", "password", "check"),
-    #                                               xscrollcommand=self.scroll_x.set, yscrollcommand=self.scroll_y.set)
-    #             style = ttk.Style(self.root)
-    #             style.configure('Treeview', rowheight=40)  # Высота каждой строки в таблице
-    #             self.scroll_x.pack(side=BOTTOM, fill=X)
-    #             self.scroll_y.pack(side=RIGHT, fill=Y)
-    #             self.scroll_x.config(command=self.Users_table.xview)
-    #             self.scroll_y.config(command=self.Users_table.yview)
-    #             self.Users_table.heading("id", text="id")
-    #             self.Users_table.heading("login", text="Логин")
-    #             self.Users_table.heading("password", text="Пароль")
-    #             self.Users_table.heading("check", text="Check")
-    #
-    #             self.Users_table.column("id", width=20)
-    #             self.Users_table.column("login", width=120)
-    #             self.Users_table.column("password", width=130)
-    #             self.Users_table.column("check", width=50)
-    #             self.Users_table['show'] = 'headings'
-    #             self.Users_table.pack(fill=BOTH, expand=1)
-    #             # self.Users_table.bind("<ButtonRelease-1>", self.get_cursor)
-    #
-    #             self.fetch_data()
-
 # function for buttons -------------------------------------------------------------------------------------------------------------------------------
     def exit_root(self):
         self.root.destroy()
@@ -351,6 +317,7 @@ class Student:
             connect.commit()
         connect.close()
 # -------------------------------------------------------------------------------------------------------------------------------
+
 # -------------------------------------------------------------------------------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------------
@@ -360,5 +327,7 @@ class Student:
 # -------------------------------------------------------------------------------------------------------------------------------
 
 root = Tk()
+# Tk.wm_attributes(root, "-fullscreen", True)
+
 ob = Student(root)
 root.mainloop()
