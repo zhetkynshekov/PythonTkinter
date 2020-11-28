@@ -4,7 +4,7 @@ from screeninfo import get_monitors
 def get_geometry(root):
     x = True
     # root.overrideredirect(x) полноэкранный режим
-    root.resizable(False, False) #Функция отключаюшее изминение размера окна
+    root.resizable(False, True) #Функция отключаюшее изминение размера окна
     # root.iconify() функция для того чтобы скрывать программу
     root.state('zoomed')
     get_mon = get_monitor()

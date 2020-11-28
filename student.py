@@ -7,6 +7,13 @@ from function_ import get_geometry, get_monitor
 
 class Student:
     def __init__(self, root):
+        def show_manage_frame():
+            if self.Manage_mini_Frame.place_info() == {}:
+                self.Add_frame.place_forget()
+                self.Manage_mini_Frame.place( y=65, width=width_manage_frame-10, height=height_manage_frame-100)
+            else:
+                self.Manage_mini_Frame.place_forget()
+                self.Add_frame.place(y=70, width=width_manage_frame - 8, height=height_manage_frame / 4)
         self.root = root
         self.root.title("Student Management System")
         get_geometry(self.root)
@@ -15,16 +22,23 @@ class Student:
         self.link = psycopg2.connect(dbname = "stm", user = "postgres", password = "askarova180774", host = "localhost") #пытался подключение сделать одниой переменной, не вышло, не принимает его
 
         self.bg_icon = ImageTk.PhotoImage(file = "template/img/main_bg.jpg") #общий фон для этого окна
+        # bg_lvl = Label(self.root, image = self.bg_icon).pack()
         bg_lvl = Label(self.root, image = self.bg_icon).pack()
+        # bg_lvl = Label(self.root, bg = "silver").pack()
 
 #Manage, Detail, Table Frame Backgrounds
-        bg_frame = "#3b4045" #Общий цвет фона для frame-ов
+        # bg_frame = "#3b4045" #Общий цвет фона для frame-ов
+        bg_frame = "#535454" #Общий цвет фона для frame-ов
         # bg_frame = "orange"
+        bg_frame_b = "#444345"  # Общий background для BUTTONS
+        fg_b = "white"  # Общий цвет текста для BUTTONS
+
+        fg_frame = "white" #Общий цвет текста для frame-ов
 
         font_all_3 = "" #Стиль текста во всем документе например bold, italic
         font_all_1 = "Times New Roman" #Стиль текста во всем документе например Times New Roman, Courier
 
-        title = Label(self.root, text = "Система управления студентами", font = (font_all_1, 36, font_all_3), bg = bg_frame, fg ="White", bd = 10)
+        title = Label(self.root, text = "Система управления студентами", font = (font_all_1, 36, font_all_3), bg = "#444345", fg ="white", bd = 10)
         # title.pack(side = TOP, fill = X)
         title.place(x=0, y=0, relwidth=1)
 # All variables for db*******************************************************************************************************************
@@ -45,64 +59,87 @@ class Student:
 
         self.Manage_Frame = Frame(self.root, bd=4, relief=RIDGE, bg= bg_frame)
         self.Manage_Frame.place(x=20, y=90, width=width_manage_frame, height=height_manage_frame)
+# Add Frame on Manage frame------------------------------------------------------------------------------------------------
+        self.Add_frame = Frame(self.Manage_Frame, bg=bg_frame)
+        self.Add_frame.place(y=70, width=width_manage_frame - 8, height=height_manage_frame / 4)
+        Add_txt = Label(self.Add_frame, text = "Добавить:", bg= bg_frame, fg = fg_frame, font = (font_all_1, 20, font_all_3))
+        Add_txt.grid(row=0, column = 0, pady=13, padx=50)
+        Add_frame_button = Frame(self.Add_frame, bg=bg_frame)
+        Add_frame_button.place(x = width_manage_frame/2, y = 5, width = width_manage_frame/2-8, height = height_manage_frame/4-8)
+        add_student_1 = Button(Add_frame_button, text = "Студента", width = 20, height = 2, bg = bg_frame_b, fg = fg_b, command = show_manage_frame)
+        add_student_1.grid(row = 0, column = 0, padx = 5, pady = 10)
+        add_student_2 = Button(Add_frame_button, text = "Учителя", width=20, height = 2, bg=bg_frame_b, fg=fg_b)
+        add_student_2.grid(row=1, column=0, padx=5, pady=10)
+        add_student_3 = Button(Add_frame_button, text = "Персонал", width=20, height = 2, bg=bg_frame_b, fg=fg_b)
+        add_student_3.grid(row=2, column=0, padx=5, pady=10)
+        add_student_4 = Button(Add_frame_button, text = "Другие", width=20, height = 2, bg=bg_frame_b, fg=fg_b)
+        add_student_4.grid(row=3, column=0, padx=5, pady=10)
+#Manage mini Frame on Add frame-------------------------------------------------------------------------------------------------------------------------------
+        self.Manage_mini_Frame = Frame(self.Manage_Frame, bg = bg_frame)
+        self.Manage_mini_Frame.place( y=65, width=width_manage_frame-10, height=height_manage_frame-100)
+        self.Manage_mini_Frame.place_forget()
+
+# -------------------------------------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------------
+        m_title = Label(self.Manage_Frame, text = "Панель управления", bd = 4, relief = RIDGE, bg= bg_frame, fg = fg_frame, font = (font_all_1, 25, font_all_3))
+        m_title.grid(row = 0, columnspan = 2, pady = 20, padx = 45, ipadx = 40, ipady = 3.5)
+        # m_title.grid(relx=.5, rely=.75, anchor="c")
 #-------------------------------------------------------------------------------------------------------------------------------
-        m_title = Label(self.Manage_Frame, text = "Добавление студентов", bg= bg_frame, fg = "white", font = (font_all_1, 25, font_all_3))
-        m_title.grid(row = 0, columnspan = 2, pady = 20)
-#-------------------------------------------------------------------------------------------------------------------------------
-        lbl_rool = Label(self.Manage_Frame, text = "No.", bg= bg_frame, fg = "white", font = (font_all_1, 20, font_all_3))
+        lbl_rool = Label(self.Manage_mini_Frame, text = "No.", bg= bg_frame, fg = fg_frame, font = (font_all_1, 20, font_all_3))
         lbl_rool.grid(row = 1, column = 0, padx = 20, pady = 20, sticky = "w")
 
-        txt_Roll = Entry(self.Manage_Frame, textvariable = self.roll_No_var, font = (font_all_1, 15, "bold"))
+        txt_Roll = Entry(self.Manage_mini_Frame, textvariable = self.roll_No_var, font = (font_all_1, 15, "bold"))
         txt_Roll.grid(row = 1, column = 1, pady = 10, sticky = "w")
 #-------------------------------------------------------------------------------------------------------------------------------
-        lbl_name = Label(self.Manage_Frame, text="Имя", bg= bg_frame, fg="white", font = (font_all_1, 20, font_all_3))
+        lbl_name = Label(self.Manage_mini_Frame, text="Имя", bg= bg_frame, fg=fg_frame, font = (font_all_1, 20, font_all_3))
         lbl_name.grid(row=2, column=0, padx = 20, pady=20, sticky="w")
 
-        txt_name = Entry(self.Manage_Frame,textvariable = self.name_var, font=(font_all_1, 15, "bold"))
+        txt_name = Entry(self.Manage_mini_Frame,textvariable = self.name_var, font=(font_all_1, 15, "bold"))
         txt_name.grid(row=2, column=1, pady=10, sticky="w")
 #-------------------------------------------------------------------------------------------------------------------------------
-        lbl_Email = Label(self.Manage_Frame, text="Email", bg= bg_frame, fg="white", font=(font_all_1, 20, font_all_3))
+        lbl_Email = Label(self.Manage_mini_Frame, text="Email", bg= bg_frame, fg=fg_frame, font=(font_all_1, 20, font_all_3))
         lbl_Email.grid(row=3, column=0, padx = 20, pady=20, sticky="w")
 
-        txt_Email = Entry(self.Manage_Frame,textvariable = self.email_var, font=(font_all_1, 15, "bold"))
+        txt_Email = Entry(self.Manage_mini_Frame,textvariable = self.email_var, font=(font_all_1, 15, "bold"))
         txt_Email.grid(row=3, column=1, pady=10, sticky="w")
 # -------------------------------------------------------------------------------------------------------------------------------
-        lbl_Gender = Label(self.Manage_Frame, text="Пол", bg= bg_frame, fg="white", font = (font_all_1, 20, font_all_3))
+        lbl_Gender = Label(self.Manage_mini_Frame, text="Пол", bg= bg_frame, fg=fg_frame, font = (font_all_1, 20, font_all_3))
         lbl_Gender.grid(row=4, column=0, padx = 20, pady=10, sticky="w")
 
-        combo_Gender = ttk.Combobox(self.Manage_Frame,textvariable = self.gender_var, font = (font_all_1, 14, "bold"), width = 17,  state = 'readonly')
+        combo_Gender = ttk.Combobox(self.Manage_mini_Frame,textvariable = self.gender_var, font = (font_all_1, 14, "bold"), width = 17,  state = 'readonly')
         combo_Gender['values'] = ("Мужчина", "Женщина")
         combo_Gender.grid(row = 4, column = 1, pady = 10, sticky="w")
 # -------------------------------------------------------------------------------------------------------------------------------
-        lbl_Contact = Label(self.Manage_Frame, text="Контакты", bg= bg_frame, fg="white", font = (font_all_1, 20, font_all_3))
+        lbl_Contact = Label(self.Manage_mini_Frame, text="Контакты", bg= bg_frame, fg=fg_frame, font = (font_all_1, 20, font_all_3))
         lbl_Contact.grid(row=5, column=0, padx = 20, pady=20, sticky="w")
 
-        txt_Contact = Entry(self.Manage_Frame,textvariable = self.contact_var, font=(font_all_1, 15, "bold"))
+        txt_Contact = Entry(self.Manage_mini_Frame,textvariable = self.contact_var, font=(font_all_1, 15, "bold"))
         txt_Contact.grid(row=5, column=1, pady=10, sticky="w")
 # -------------------------------------------------------------------------------------------------------------------------------
-        lbl_DOB = Label(self.Manage_Frame, text="Дата рождения", bg= bg_frame, fg="white", font = (font_all_1, 20, font_all_3))
+        lbl_DOB = Label(self.Manage_mini_Frame, text="Дата рождения", bg= bg_frame, fg=fg_frame, font = (font_all_1, 20, font_all_3))
         lbl_DOB.grid(row=6, column=0, padx = 20, pady=20, sticky="w")
 
-        txt_DOB = Entry(self.Manage_Frame,textvariable = self.dob_var, font=(font_all_1, 15, "bold"))
+        txt_DOB = Entry(self.Manage_mini_Frame,textvariable = self.dob_var, font=(font_all_1, 15, "bold"))
         txt_DOB.grid(row=6, column=1, pady=10, sticky="w")
 # -------------------------------------------------------------------------------------------------------------------------------
-        lbl_Address = Label(self.Manage_Frame, text="Адрес", bg= bg_frame, fg="white", font=(font_all_1, 20, font_all_3))
+        lbl_Address = Label(self.Manage_mini_Frame, text="Адрес", bg= bg_frame, fg=fg_frame, font=(font_all_1, 20, font_all_3))
         lbl_Address.grid(row=7, column=0, padx = 20, pady=20, sticky="w")
 
-        self.txt_Address = Text(self.Manage_Frame, width = 20, height = 4, font = (font_all_1, 14, "bold"))
+        self.txt_Address = Text(self.Manage_mini_Frame, width = 20, height = 4, font = (font_all_1, 14, "bold"))
         self.txt_Address.grid(row=7, column=1, pady=10, sticky="w")
 # Button Frame on Manage frame-------------------------------------------------------------------------------------------------------------------------------
-        Button_Frame = Frame(self.Manage_Frame, bd=4, relief=RIDGE, bg="white")
+        Button_Frame = Frame(self.Manage_mini_Frame, bd=4, relief=RIDGE, bg="white")
         # Button_Frame.place(x=8, y=680, width=width_manage_frame * 0.912)
         Button_Frame.place(relx=.5, rely=.75, anchor="c")
 
         padx_b = 20 #Общий padx для ADD ,UPDATE ,DELETE , CLEAR BUTTONS
-        bg_frame_b = "#444345" #Общий background для ADD ,UPDATE ,DELETE , CLEAR BUTTONS
-        fg_b = "white" #Общий цвет текста для ADD ,UPDATE ,DELETE , CLEAR BUTTONS
+
+
 
         AddButton = Button(Button_Frame, text = "Добавить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.add_students).grid(row = 0, column = 0, padx = padx_b, pady = 10)
         UpdateButton = Button(Button_Frame, text = "Обновить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.update_data).grid(row = 0, column = 1, padx = padx_b, pady = 10)
-        DeleteButton = Button(Button_Frame, text = "Удалить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.delete_data).grid(row = 1, column = 0, padx = padx_b, pady = 10)
+        Back_Button = Button(Button_Frame, text = "Назад", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = show_manage_frame).grid(row = 1, column = 0, padx = padx_b, pady = 10)
+        # DeleteButton = Button(Button_Frame, text = "Удалить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.delete_data).grid(row = 1, column = 0, padx = padx_b, pady = 10)
         ClearButton = Button(Button_Frame, text = "Очистить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.clear).grid(row = 1, column = 1, padx = padx_b, pady = 10)
 # Detail Frame*******************************************************************************************************************
         width_detail_frame = get_mo[0] * 0.729 #Ширина Detail Frame
@@ -111,7 +148,7 @@ class Student:
         self.Detail_Frame = Frame(self.root, bd=4, relief=RIDGE, bg= bg_frame)
         self.Detail_Frame.place(x=500, y=90, width=width_detail_frame, height=height_detail_frame)
 # -------------------------------------------------------------------------------------------------------------------------------
-        self.lbl_Search = Label(self.Detail_Frame, text="Поиск по", bg= bg_frame, fg="white", font=(font_all_1, 20, font_all_3)) #надпись Поиск по
+        self.lbl_Search = Label(self.Detail_Frame, text="Поиск по", bg= bg_frame, fg=fg_frame, font=(font_all_1, 20, font_all_3)) #надпись Поиск по
         self.lbl_Search.grid(row=0, column=0, padx = 20, pady=20, sticky="w")
         self.combo_Search = ttk.Combobox(self.Detail_Frame, textvariable = self.search_by, width = 10,
                                          font=("Times New Roman", 13, font_all_3), state='readonly')
@@ -134,7 +171,7 @@ class Student:
         SearchButton = Button(self.Detail_Frame, text="Поиск", width=10, pady = 5, bg = bg_frame_b, fg = fg_b, command = self.search_data, font=(font_all_1, 14, font_all_3)).grid(row=0, column=3, padx=30, pady=10)
         ShowallButton = Button(self.Detail_Frame, text="Показать все", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.fetch_data, font=(font_all_1, 14, font_all_3)).grid(row=0, column=4, padx=30, pady=10)
         exit_root = Button(self.Detail_Frame, text="Выйти", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.exit_root, font=(font_all_1, 14, font_all_3)).grid(row=0, column=5, padx=30, pady=10)
-        # self.show_manage_frame = Button(self.Detail_Frame, text = self.show_manage_frame_txt, width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.show_manage_frame, font=(font_all_1, 14, font_all_3)).grid(row=0, column=6, padx=30, pady=10)
+        show_manage_frame = Button(self.Detail_Frame, text = "Скрыть", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = show_manage_frame, font=(font_all_1, 14, font_all_3)).grid(row=0, column=7, padx=30, pady=10)
 # ComboBox for Table Frame*******************************************************************************************************************
         self.change_Table_txt = StringVar()
         self.combo_change_table = ttk.Combobox(self.Detail_Frame, textvariable=self.change_Table_txt, width=10,
@@ -192,12 +229,6 @@ class Student:
 # function for buttons -------------------------------------------------------------------------------------------------------------------------------
     def exit_root(self):
         self.root.destroy()
-
-    def selection(self, event):
-        """ gets selected item id and prints them
-        """
-        id = self.tree.identify_row(event.y)
-        print ("selection", id)
 # Connect to db -------------------------------------------------------------------------------------------------------------------------------
     def add_students(self):
         if self.roll_No_var.get() == "" or self.name_var.get() == "":

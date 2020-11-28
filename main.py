@@ -22,6 +22,7 @@ class Login_System:
         self.name_ = StringVar()
         self.pass_ = StringVar()
 
+        # bg_lbl = Label(self.root, image = self.bg_icon).pack() #Показ main_bg
         bg_lbl = Label(self.root, image = self.bg_icon).pack() #Показ main_bg
 
         title = Label(self.root, text = "Добро пожаловать!", font = ("Times New Roman", 40 ), bg = "#444345", fg = "white", bd = 10)
