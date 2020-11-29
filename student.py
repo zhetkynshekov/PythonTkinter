@@ -66,8 +66,7 @@ class Student:
         add_student_1 = Button(Add_frame_button, text = "Студента", width = 20, height = 2, bg = bg_frame_b, fg = fg_b, command = add_with_arg,
                                font = (font_all_1, 10, ""))
         add_student_1.grid(row = 0, column = 0, padx = 5, pady = 10)
-        update_with_arg = partial(self.show_manage_frame, "update")
-        add_student_2 = Button(Add_frame_button, text = "Учителя", width=20, height = 2, bg=bg_frame_b, fg=fg_b, command = update_with_arg,
+        add_student_2 = Button(Add_frame_button, text = "Учителя", width=20, height = 2, bg=bg_frame_b, fg=fg_b,
                                font = (font_all_1, 10, ""))
         add_student_2.grid(row=1, column=0, padx=5, pady=10)
         add_student_3 = Button(Add_frame_button, text = "Персонал", width=20, height = 2, bg=bg_frame_b, fg=fg_b,
@@ -76,6 +75,22 @@ class Student:
         add_student_4 = Button(Add_frame_button, text = "Другие", width=20, height = 2, bg=bg_frame_b, fg=fg_b,
                                font = (font_all_1, 10, ""))
         add_student_4.grid(row=3, column=0, padx=5, pady=10)
+# Кнопка для обновления и удаления-----------------------------------------------------------------------------------------------------------------
+        self.Update_Delete_Frame = Frame(self.Manage_Frame, bg=bg_frame)
+        self.Update_Delete_Frame.place( y= 100 + (self.height_manage_frame / 4),
+                             width=self.width_manage_frame - 8, height=self.height_manage_frame / 4)
+        Update_Delete_frame_button = Frame(self.Update_Delete_Frame, bg=bg_frame)
+        Update_Delete_frame_button.place(x=self.width_manage_frame / 2, y=5, width=self.width_manage_frame / 2 - 8,
+                               height=self.height_manage_frame / 4 - 8)
+        Add_txt = Label(self.Update_Delete_Frame, text="Действия:", bg=bg_frame, fg=fg_frame, font=(font_all_1, 20, font_all_3))
+        Add_txt.grid(row=0, column=0, pady=13, padx=50)
+        self.UpdateButton_main = Button(Update_Delete_frame_button, text="Обновить", width=20, height=2, bg=bg_frame_b, fg=fg_b,
+                                command = self.get_cursor, font=(font_all_1, 10, ""), state = DISABLED)
+        self.UpdateButton_main.grid(row=0, column=1, padx=5, pady=10)
+        self.DeleteButton_main = Button(Update_Delete_frame_button, text="Удалить", width=20, height=2, bg=bg_frame_b, fg=fg_b,
+                                command=self.delete_data, font=(font_all_1, 10, ""), state=DISABLED)
+        self.DeleteButton_main.grid(row=1, column=1, padx=5, pady=10)
+
 #Manage mini Frame on Add frame-------------------------------------------------------------------------------------------------------------------------------
         self.Manage_mini_Frame = Frame(self.Manage_Frame, bg = bg_frame)
         self.Manage_mini_Frame.place( y=75, width=self.width_manage_frame-10, height=self.height_manage_frame-100)
@@ -84,7 +99,7 @@ class Student:
 # -------------------------------------------------------------------------------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------------
         m_title = Label(self.Manage_Frame, text = "Панель управления", bd = 4, relief = RIDGE, bg= bg_frame, fg = fg_frame, font = (font_all_1, 25, font_all_3))
-        m_title.grid(row = 0, columnspan = 2, pady = 20, padx = 45, ipadx = 40, ipady = 3.5)
+        m_title.grid(row = 0, columnspan = 2, pady = 15, padx = 45, ipadx = 40, ipady = 3.5)
         # m_title.grid(relx=.5, rely=.75, anchor="c")
 #-------------------------------------------------------------------------------------------------------------------------------
         lbl_rool = Label(self.Manage_mini_Frame, text = "No.", bg= bg_frame, fg = fg_frame, font = (font_all_1, 20, font_all_3))
@@ -150,19 +165,19 @@ class Student:
         # self.Back_Button.grid(row = 9, column = 0, padx = 0, pady = 10)
         # self.Back_Button.grid_forget()
 # Button Frame on Manage frame-------------------------------------------------------------------------------------------------------------------------------
-        Button_Frame = Frame(self.Manage_mini_Frame, bd=4, relief=RIDGE, bg="white")
+#         Button_Frame = Frame(self.Manage_mini_Frame, bd=4, relief=RIDGE, bg="white")
         # Button_Frame.place(x=8, y=680, width=width_manage_frame * 0.912)
-        Button_Frame.place(relx=.5, rely=.75, anchor="c")
-        Button_Frame.place_forget()
+        # Button_Frame.place(relx=.5, rely=.75, anchor="c")
+        # Button_Frame.place_forget()
 
-        padx_b = 20 #Общий padx для ADD ,UPDATE ,DELETE , CLEAR BUTTONS
+        # padx_b = 20 #Общий padx для ADD ,UPDATE ,DELETE , CLEAR BUTTONS
 
 
 
-        AddButton1 = Button(Button_Frame, text = "Добавить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.add_students).grid(row = 0, column = 0, padx = padx_b, pady = 10)
-        UpdateButton = Button(Button_Frame, text = "Обновить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.update_data).grid(row = 0, column = 1, padx = padx_b, pady = 10)
+        # AddButton1 = Button(Button_Frame, text = "Добавить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.add_students).grid(row = 0, column = 0, padx = padx_b, pady = 10)
+        # UpdateButton = Button(Button_Frame, text = "Обновить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.update_data).grid(row = 0, column = 1, padx = padx_b, pady = 10)
         # DeleteButton = Button(Button_Frame, text = "Удалить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.delete_data).grid(row = 1, column = 0, padx = padx_b, pady = 10)
-        ClearButton = Button(Button_Frame, text = "Очистить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.clear).grid(row = 1, column = 1, padx = padx_b, pady = 10)
+        # ClearButton = Button(Button_Frame, text = "Очистить", width = 15, height = 1, bg = bg_frame_b, fg = fg_b, command = self.clear).grid(row = 1, column = 1, padx = padx_b, pady = 10)
 # Detail Frame*******************************************************************************************************************
         width_detail_frame = self.get_mo[0] * 0.729 #Ширина Detail Frame
         height_detail_frame = self.get_mo[1] * 0.9 #Высота Detail Frame
@@ -193,7 +208,7 @@ class Student:
         SearchButton = Button(self.Detail_Frame, text="Поиск", width=10, pady = 5, bg = bg_frame_b, fg = fg_b, command = self.search_data, font=(font_all_1, 14, font_all_3)).grid(row=0, column=3, padx=30, pady=10)
         ShowallButton = Button(self.Detail_Frame, text="Показать все", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.fetch_data, font=(font_all_1, 14, font_all_3)).grid(row=0, column=4, padx=30, pady=10)
         exit_root = Button(self.Detail_Frame, text="Выйти", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.exit_root, font=(font_all_1, 14, font_all_3)).grid(row=0, column=5, padx=30, pady=10)
-        show_manage_frame = Button(self.Detail_Frame, text = "Скрыть", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.show_manage_frame, font=(font_all_1, 14, font_all_3)).grid(row=0, column=7, padx=30, pady=10)
+        # show_manage_frame = Button(self.Detail_Frame, text = "Скрыть", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.show_manage_frame, font=(font_all_1, 14, font_all_3)).grid(row=0, column=7, padx=30, pady=10)
 # ComboBox for Table Frame*******************************************************************************************************************
         self.change_Table_txt = StringVar()
         self.combo_change_table = ttk.Combobox(self.Detail_Frame, textvariable=self.change_Table_txt, width=10,
@@ -237,38 +252,50 @@ class Student:
         self.Student_table.column("address", width=180)
         self.Student_table['show'] = 'headings'
         self.Student_table.pack(fill=BOTH, expand=1)
-        self.Student_table.bind("<Double-Button-1>", self.get_cursor)
+        # self.Student_table.bind("<Double-Button-1>", self.get_cursor)
+        # checker_ButtonRelease_txt = partial(self.checker_ButtonRelease)
+        self.Student_table.bind("<ButtonRelease-1>", self.checker_ButtonRelease)
 
         self.fetch_data()
+
+#checker для bind чтобы сделать кнопки обновить и удалить активными*********************************************************************************************************************
+    def checker_ButtonRelease(self, event):
+        if self.Student_table.focus() != "":
+            self.show_manage_frame()
+            self.UpdateButton_main.config(state = NORMAL)
+            self.DeleteButton_main.config(state = NORMAL)
 #Показ панели управления*********************************************************************************************************************
     def show_manage_frame(self, Check = ""):
-        if Check == "add":
-            if self.Manage_mini_Frame.place_info() == {}:
+        self.UpdateButton_main.config(state=DISABLED)
+        self.DeleteButton_main.config(state=DISABLED)
+        if Check == "add": #Если нажать кнопку для добавления тогда идет этот вариант
+            if self.Manage_mini_Frame.place_info() == {}: #Если бланк для добавления скрыт, то показать его и показать кнопку добавить
                 self.Add_frame.place_forget()
+                self.clear()
                 self.Manage_mini_Frame.place(y=65, width=self.width_manage_frame - 10, height=self.height_manage_frame - 100)
                 self.AddButton.grid(row=8, columnspan=2, padx=40, pady=15)
                 self.Back_Button.grid(row=9, column=0, padx=0, pady=10)
                 self.DeleteButton.grid_forget()
-            else:
+            else: # Скрыть бланк для добавления и показать выборку для добавлений(Студент, Учитель, ..)
                 self.Manage_mini_Frame.place_forget()
                 self.Add_frame.place(y=70, width=self.width_manage_frame - 8, height=self.height_manage_frame / 4)
                 self.AddButton.grid_forget()
                 self.DeleteButton.grid_forget()
                 self.Back_Button.grid_forget()
-        elif Check == "update":
-            if self.Manage_mini_Frame.place_info() == {}:
+        elif Check == "update": #Если нажать кнопку для обновления тогда идет этот вариант
+            if self.Manage_mini_Frame.place_info() == {}: #Если бланк для обновления скрыт, то показать его и показать кнопку обновить, удалить
                 self.Add_frame.place_forget()
                 self.Manage_mini_Frame.place(y=65, width=self.width_manage_frame - 10, height=self.height_manage_frame - 100)
                 self.UpdateButton.grid(row=8, columnspan=2, padx=40, pady=15)
                 self.DeleteButton.grid(row=9, columnspan=2, padx=40, pady=15)
                 self.Back_Button.grid(row=10, column=0, padx=0, pady=10)
-            else:
+            else: # Скрыть бланк для обновления и удаления и показать выборку для добавлений(Студент, Учитель, ..)
                 self.Manage_mini_Frame.place_forget()
                 self.Add_frame.place(y=70, width=self.width_manage_frame - 8, height=self.height_manage_frame / 4)
                 self.UpdateButton.grid_forget()
                 self.DeleteButton.grid_forget()
                 self.Back_Button.grid_forget()
-        else:
+        else: # Скрыть бланки и показать выборку для добавлений(Студент, Учитель, ..)
             self.Manage_mini_Frame.place_forget()
             self.Add_frame.place(y=70, width=self.width_manage_frame - 8, height=self.height_manage_frame / 4)
             self.AddButton.grid_forget()
@@ -276,6 +303,8 @@ class Student:
             self.Back_Button.grid_forget()
 # gender bind -------------------------------------------------------------------------------------------------------------------------------
     def TextBoxUpdate(self, event):
+        self.UpdateButton_main.config(state=DISABLED)
+        self.DeleteButton_main.config(state=DISABLED)
         if self.search_by.get() == "gender":
             self.txt_Search.grid_remove()
             self.combo_gender.grid()
@@ -287,6 +316,8 @@ class Student:
         self.root.destroy()
 # Connect to db -------------------------------------------------------------------------------------------------------------------------------
     def add_students(self):
+        self.UpdateButton_main.config(state=DISABLED)
+        self.DeleteButton_main.config(state=DISABLED)
         if self.roll_No_var.get() == "" or self.name_var.get() == "":
                 messagebox.showerror("Error", "All fields are required!!!")
         else:
@@ -309,12 +340,15 @@ class Student:
                     self.clear()
 
                     connect.close()
+                    self.show_manage_frame()
                     messagebox.showinfo("Success", "Данные были успешно записаны!")
                 except:
                     messagebox.showerror("Error", "Студент с таким номером уже существует!")
 
 # Show data on table from db-------------------------------------------------------------------------------------------------------------------------------
     def fetch_data(self):
+        self.UpdateButton_main.config(state=DISABLED)
+        self.DeleteButton_main.config(state=DISABLED)
         self.txt_Search.delete(0, END)
         self.combo_Search.set("")
         connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
@@ -338,13 +372,12 @@ class Student:
         self.dob_var.set(""),
         self.txt_Address.delete('1.0', END)
 # get one row which you click then set on blank for add student-------------------------------------------------------------------------------------------------------------------------------
-    def get_cursor(self, event):
+    def get_cursor(self):
         self.show_manage_frame("update")
         curosor_row = self.Student_table.focus()
         contents = self.Student_table.item(curosor_row)
         row = contents['values']
         removed = row[6].replace("\n", "")
-        print(row)
 
 
         self.roll_No_var.set(row[0]),
@@ -372,7 +405,7 @@ class Student:
                     self.txt_Address.get('1.0', END),
                     self.roll_No_var.get()
                 ))
-
+            self.show_manage_frame()
             connect.commit()
 
             self.fetch_data()
@@ -381,17 +414,22 @@ class Student:
             connect.close()
 # Delete data from db-------------------------------------------------------------------------------------------------------------------------------
     def delete_data(self):
-        connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
-        cur = connect.cursor()
-        print(self.roll_No_var.get())
-        cur.execute("delete from students where roll_no={}".format(self.roll_No_var.get()) )
-        connect.commit()
-        connect.close()
-        self.fetch_data()
-        self.clear()
+        option = messagebox.askyesno("Update", "Вы хотите удалить этот обьект?")
+        if option > 0:
+            connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
+            cur = connect.cursor()
+            print(self.roll_No_var.get())
+            cur.execute("delete from students where roll_no={}".format(self.roll_No_var.get()) )
+            connect.commit()
+            connect.close()
+            self.fetch_data()
+            self.clear()
+            self.show_manage_frame()
 # Search data by key-------------------------------------------------------------------------------------------------------------------------------
     def search_data(self):
         # connect = self.link
+        self.UpdateButton_main.config(state=DISABLED)
+        self.DeleteButton_main.config(state=DISABLED)
         connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
         cur = connect.cursor()
         if self.search_by.get() == "roll_no":
@@ -420,7 +458,5 @@ class Student:
 # -------------------------------------------------------------------------------------------------------------------------------
 
 root = Tk()
-# Tk.wm_attributes(root, "-fullscreen", True)
-
 ob = Student(root)
 root.mainloop()
