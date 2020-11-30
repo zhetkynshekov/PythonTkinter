@@ -102,12 +102,12 @@ class Student:
         m_title.grid(row = 0, columnspan = 2, pady = 15, padx = 45, ipadx = 40, ipady = 3.5)
         # m_title.grid(relx=.5, rely=.75, anchor="c")
 #-------------------------------------------------------------------------------------------------------------------------------
-        lbl_rool = Label(self.Manage_mini_Frame, text = "No.", bg= bg_frame, fg = fg_frame, font = (font_all_1, 20, font_all_3))
-        lbl_rool.grid(row = 1, column = 0, padx = 20, pady = 20, sticky = "w")
+        self.lbl_rool = Label(self.Manage_mini_Frame, text = "No.", bg= bg_frame, fg = fg_frame, font = (font_all_1, 20, font_all_3))
+        # self.lbl_rool.grid(row = 1, column = 0, padx = 20, pady = 20, sticky = "w")
 
-        txt_Roll = Entry(self.Manage_mini_Frame, textvariable = self.roll_No_var, font = (font_all_1, 15, "bold"))
-        txt_Roll.grid(row = 1, column = 1, pady = 10, sticky = "w")
-#-------------------------------------------------------------------------------------------------------------------------------
+        self.txt_Roll = Entry(self.Manage_mini_Frame, textvariable = self.roll_No_var, font = (font_all_1, 15, "bold"), state = DISABLED)
+        # self.txt_Roll.grid(row = 1, column = 1, pady = 10, sticky = "w")
+# -------------------------------------------------------------------------------------------------------------------------------
         lbl_name = Label(self.Manage_mini_Frame, text="Имя", bg= bg_frame, fg=fg_frame, font = (font_all_1, 20, font_all_3))
         lbl_name.grid(row=2, column=0, padx = 20, pady=20, sticky="w")
 
@@ -208,7 +208,7 @@ class Student:
         SearchButton = Button(self.Detail_Frame, text="Поиск", width=10, pady = 5, bg = bg_frame_b, fg = fg_b, command = self.search_data, font=(font_all_1, 14, font_all_3)).grid(row=0, column=3, padx=30, pady=10)
         ShowallButton = Button(self.Detail_Frame, text="Показать все", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.fetch_data, font=(font_all_1, 14, font_all_3)).grid(row=0, column=4, padx=30, pady=10)
         exit_root = Button(self.Detail_Frame, text="Выйти", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.exit_root, font=(font_all_1, 14, font_all_3)).grid(row=0, column=5, padx=30, pady=10)
-        # show_manage_frame = Button(self.Detail_Frame, text = "Скрыть", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.show_manage_frame, font=(font_all_1, 14, font_all_3)).grid(row=0, column=7, padx=30, pady=10)
+        # show_manage_frame = Button(self.Detail_Frame, text = "100", width=15, pady = 5, padx = 10, bg = bg_frame_b, fg = fg_b, command = self.add_100, font=(font_all_1, 14, font_all_3)).grid(row=0, column=7, padx=30, pady=10)
 # ComboBox for Table Frame*******************************************************************************************************************
         self.change_Table_txt = StringVar()
         self.combo_change_table = ttk.Combobox(self.Detail_Frame, textvariable=self.change_Table_txt, width=10,
@@ -257,6 +257,42 @@ class Student:
         self.Student_table.bind("<ButtonRelease-1>", self.checker_ButtonRelease)
 
         self.fetch_data()
+
+
+
+    def get_roll_no_identity(self):
+        connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
+        cur = connect.cursor()
+
+        cur.execute("select roll_no from students order by roll_no")
+        rows = cur.fetchall()
+        j = 1
+        for i in range(0,1500):
+            removed1 = str(rows[i]).replace("(", "")
+            removed2 = str(removed1).replace(",", "")
+            removed3 = str(removed2).replace(")", "")
+            if int(removed3) == j:
+                j += 1
+            else:
+                # print("i" + str(i))
+                # print("removed3" + removed3)
+                # print("j" + str(j))
+                request = int(removed3) - 1
+                return request
+            print(i)
+
+        connect.commit()
+        connect.close()
+        # for i in range(124,1000):
+        #     cur.execute("insert into students values(%s,%s,%s,%s,%s,%s,%s)", (i,
+        #                                                                       "test",
+        #                                                                       "test@gmail.com",
+        #                                                                       "",
+        #                                                                       "87082414522",
+        #                                                                       "24-07-1999",
+        #                                                                       "Aqtobe"
+        #                                                                       ))
+        #     connect.commit()
 
 #checker для bind чтобы сделать кнопки обновить и удалить активными*********************************************************************************************************************
     def checker_ButtonRelease(self, event):
@@ -318,32 +354,31 @@ class Student:
     def add_students(self):
         self.UpdateButton_main.config(state=DISABLED)
         self.DeleteButton_main.config(state=DISABLED)
-        if self.roll_No_var.get() == "" or self.name_var.get() == "":
+        if self.email_var.get() == "" or self.name_var.get() == "":
                 messagebox.showerror("Error", "All fields are required!!!")
         else:
                 connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
                 cur = connect.cursor()
-                try:
-                    removed = self.txt_Address.get('1.0', END).replace("\n", "")
-                    cur.execute("insert into students values(%s,%s,%s,%s,%s,%s,%s)", (self.roll_No_var.get(),
-                                                                                      self.name_var.get(),
-                                                                                      self.email_var.get(),
-                                                                                      self.gender_var.get(),
-                                                                                      self.contact_var.get(),
-                                                                                      self.dob_var.get(),
-                                                                                      removed
-                                                                                      ))
+                roll_no = self.get_roll_no_identity()
+                print(roll_no)
+                removed = self.txt_Address.get('1.0', END).replace("\n", "")
+                cur.execute("insert into students values(%s,%s,%s,%s,%s,%s,%s)", (roll_no,
+                                                                                  self.name_var.get(),
+                                                                                  self.email_var.get(),
+                                                                                  self.gender_var.get(),
+                                                                                  self.contact_var.get(),
+                                                                                  self.dob_var.get(),
+                                                                                  removed
+                                                                                  ))
 
-                    connect.commit()
+                connect.commit()
 
-                    self.fetch_data()
-                    self.clear()
+                self.fetch_data()
+                self.clear()
 
-                    connect.close()
-                    self.show_manage_frame()
-                    messagebox.showinfo("Success", "Данные были успешно записаны!")
-                except:
-                    messagebox.showerror("Error", "Студент с таким номером уже существует!")
+                connect.close()
+                self.show_manage_frame()
+                messagebox.showinfo("Success", "Данные были успешно записаны под номером " + str(roll_no))
 
 # Show data on table from db-------------------------------------------------------------------------------------------------------------------------------
     def fetch_data(self):
@@ -416,15 +451,30 @@ class Student:
     def delete_data(self):
         option = messagebox.askyesno("Update", "Вы хотите удалить этот обьект?")
         if option > 0:
-            connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
-            cur = connect.cursor()
-            print(self.roll_No_var.get())
-            cur.execute("delete from students where roll_no={}".format(self.roll_No_var.get()) )
-            connect.commit()
-            connect.close()
-            self.fetch_data()
-            self.clear()
-            self.show_manage_frame()
+            try:
+                connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
+                cur = connect.cursor()
+                print(self.roll_No_var.get())
+                cur.execute("delete from students where roll_no={}".format(self.roll_No_var.get()))
+                connect.commit()
+                connect.close()
+                self.fetch_data()
+                self.clear()
+                self.show_manage_frame()
+            except:
+                connect = psycopg2.connect(dbname="stm", user="postgres", password="askarova180774", host="localhost")
+                cur = connect.cursor()
+                curosor_row = self.Student_table.focus()
+                contents = self.Student_table.item(curosor_row)
+                row = contents['values']
+                # print(row[0])
+                cur.execute("delete from students where roll_no={}".format(row[0]))
+                connect.commit()
+                connect.close()
+                self.fetch_data()
+                self.clear()
+                self.show_manage_frame()
+
 # Search data by key-------------------------------------------------------------------------------------------------------------------------------
     def search_data(self):
         # connect = self.link
